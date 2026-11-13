@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dynamic Form</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #141e30, #243b55);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 550px;
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #243b55;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 7px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #2575fc;
+            box-shadow: 0 0 5px rgba(37,117,252,0.3);
+        }
+
+        .skill-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .skill-row input {
+            flex: 1;
+            min-width: 0;
+        }
+
+        button {
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .add-btn {
+            background: #2575fc;
+            color: white;
+            margin-top: 15px;
+        }
+
+        .remove-btn {
+            background: #ff4757;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            color: white;
+            margin-top: 25px;
+            padding: 15px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: translateY(-2px);
+        }
+
+        #message {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: green;
+        }
+
+        .section-title {
+            margin-top: 25px;
+            color: #243b55;
+            font-size: 18px;
+        }
+
+        @media (max-width: 450px) {
+            .container {
+                padding: 22px;
+            }
+
+            .skill-row {
+                gap: 6px;
+            }
+
+            .remove-btn {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Dynamic Form</h1>
+
+        <p class="subtitle">
+            Enter your information below
+        </p>
+
+        <form id="dynamicForm">
+
+            <!-- Personal Information -->
+
+            <label for="name">Full Name</label>
+            <input
+                type="text"
+                id="name"
+                placeholder="Enter your full name"
+                required
+            >
+
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                required
+            >
+
+            <label for="phone">Phone Number</label>
+            <input
+                type="tel"
+                id="phone"
+                placeholder="Enter your phone number"
+                required
+            >
+
+            <!-- Dynamic Skills Section -->
+
+            <h3 class="section-title">
+                Your Skills
+            </h3>
+
+            <div id="skillsContainer">
+
+                <div class="skill-row">
+                    <input
+                        type="text"
+                        placeholder="Enter a skill"
+                        class="skill-input"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="remove-btn"
+                        onclick="removeSkill(this)"
+                    >
+                        Remove
+                    </button>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="add-btn"
+                onclick="addSkill()"
+            >
+                + Add Another Skill
+            </button>
+
+            <!-- Submit Button -->
+
+            <button
+                type="submit"
+                class="submit-btn"
+            >
+                Submit Form
+            </button>
+
+        </form>
+
+        <div id="message"></div>
+
+    </div>
+
+    <script>
+
+        // Function to add a new skill field
+
+        function addSkill() {
+
+            const container =
+                document.getElementById("skillsContainer");
+
+            const skillRow = document.createElement("div");
+
+            skillRow.className = "skill-row";
+
+            skillRow.innerHTML = `
+                <input
+                    type="text"
+                    placeholder="Enter another skill"
+                    class="skill-input"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="remove-btn"
+                    onclick="removeSkill(this)"
+                >
+                    Remove
+                </button>
+            `;
+
+            container.appendChild(skillRow);
+        }
+
+
+        // Function to remove a skill field
+
+        function removeSkill(button) {
+
+            const container =
+                document.getElementById("skillsContainer");
+
+            if (container.children.length > 1) {
+
+                button.parentElement.remove();
+
+            } else {
+
+                alert("At least one skill field is required!");
+
+            }
+        }
+
+
+        // Function to submit the form
+
+        document.getElementById("dynamicForm")
+            .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const name =
+                document.getElementById("name").value.trim();
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const phone =
+                document.getElementById("phone").value.trim();
+
+            const skillInputs =
+                document.querySelectorAll(".skill-input");
+
+            let skills = [];
+
+            // Collect all skills
+
+            skillInputs.forEach(function(input) {
+
+                const skill = input.value.trim();
+
+                if (skill !== "") {
+                    skills.push(skill);
+                }
+
+            });
+
+            // Validate skill fields
+
+            if (skills.length === 0) {
+
+                alert("Please enter at least one skill!");
+                return;
+
+            }
+
+            // Display success message
+
+            const message =
+                document.getElementById("message");
+
+            message.innerHTML =
+                "Form Submitted Successfully!";
+
+            // Display submitted information
+
+            alert(
+                "Registration Successful!\n\n" +
+                "Name: " + name + "\n" +
+                "Email: " + email + "\n" +
+                "Phone: " + phone + "\n" +
+                "Skills: " + skills.join(", ")
+            );
+
+            // Reset form
+
+            this.reset();
+
+            // Restore one skill field
+
+            document.getElementById("skillsContainer")
+                .innerHTML = `
+                    <div class="skill-row">
+                        <input
+                            type="text"
+                            placeholder="Enter a skill"
+                            class="skill-input"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="remove-btn"
+                            onclick="removeSkill(this)"
+                        >
+                            Remove
+                        </button>
+                    </div>
+                `;
+
+        });
+
+    </script>
+
+</body>
+</html>
